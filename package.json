@@ -1,0 +1,30 @@
+{
+  "name": "asyntai-ai-chatbot",
+  "version": "1.0.0",
+  "description": "Send your notes to the Asyntai AI chatbot knowledge base, ask it questions, and read website chats and leads inside Obsidian.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "test": "node esbuild.config.mjs test && node --test tests/unit.test.mjs",
+    "test:live": "node esbuild.config.mjs test && node --test tests/live.test.mjs"
+  },
+  "keywords": [
+    "obsidian",
+    "ai",
+    "chatbot",
+    "knowledge-base",
+    "asyntai"
+  ],
+  "author": "Asyntai <hello@asyntai.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.0",
+    "obsidian": "latest",
+    "typescript": "^5.6.0"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
+  }
+}

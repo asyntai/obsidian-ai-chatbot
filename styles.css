@@ -1,0 +1,158 @@
+.asyntai-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 0;
+}
+
+.asyntai-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 8px 8px 0;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.asyntai-tab {
+    flex: 1;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 6px 6px 0 0;
+    color: var(--text-muted);
+}
+
+.asyntai-tab.is-active {
+    background: var(--background-secondary);
+    color: var(--text-normal);
+    font-weight: 600;
+}
+
+.asyntai-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 8px;
+    gap: 8px;
+}
+
+.asyntai-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.asyntai-icon-btn {
+    padding: 2px 6px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.asyntai-list,
+.asyntai-answers {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.asyntai-row {
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--background-secondary);
+    cursor: pointer;
+}
+
+.asyntai-row:hover {
+    background: var(--background-modifier-hover);
+}
+
+.asyntai-row-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.asyntai-row-meta {
+    font-size: var(--font-ui-smaller);
+    color: var(--text-muted);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.asyntai-msg {
+    padding: 8px 10px;
+    border-radius: 8px;
+    max-width: 92%;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.asyntai-msg-user {
+    align-self: flex-end;
+    background: var(--interactive-accent);
+    color: var(--text-on-accent);
+}
+
+.asyntai-msg-bot {
+    align-self: flex-start;
+    background: var(--background-secondary);
+}
+
+.asyntai-msg-bot .asyntai-small {
+    margin-top: 6px;
+}
+
+.asyntai-small {
+    font-size: var(--font-ui-smaller);
+    padding: 2px 8px;
+    height: auto;
+}
+
+.asyntai-empty {
+    color: var(--text-muted);
+    padding: 12px;
+    text-align: center;
+}
+
+.asyntai-error {
+    color: var(--text-error);
+}
+
+.asyntai-ask-form {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.asyntai-ask-input {
+    flex: 1;
+    resize: vertical;
+}
+
+.asyntai-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.asyntai-settings-status {
+    color: var(--text-muted);
+    padding: 0 0 12px;
+    min-height: 1.4em;
+}
+
+.asyntai-key-input {
+    width: 100%;
+}
+
+.asyntai-folder-input {
+    width: 100%;
+    font-family: var(--font-monospace);
+}
