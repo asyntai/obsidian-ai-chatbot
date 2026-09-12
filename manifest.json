@@ -1,9 +1,9 @@
 {
   "id": "asyntai-ai-chatbot",
   "name": "Asyntai AI Chatbot",
-  "version": "1.0.0",
-  "minAppVersion": "1.4.0",
-  "description": "Send your notes to the Asyntai AI chatbot knowledge base, ask it questions, and read your website chats and leads inside Obsidian.",
+  "version": "1.0.1",
+  "minAppVersion": "1.7.2",
+  "description": "Send your notes to the Asyntai AI chatbot knowledge base, ask it questions, and read your website chats and leads.",
   "author": "Asyntai",
   "authorUrl": "https://asyntai.com",
   "helpUrl": "https://asyntai.com/documentation/integrations/obsidian/",

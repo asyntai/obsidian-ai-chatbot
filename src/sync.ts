@@ -163,7 +163,7 @@ export class SyncEngine {
         if (old && old !== kb) {
             try {
                 await this.api.deleteEntry(old);
-            } catch (err) {
+            } catch {
                 // The new entry is live; a leftover copy is harmless.
             }
         }
@@ -178,7 +178,7 @@ export class SyncEngine {
         }
         try {
             await this.api.deleteEntry(known.kb);
-        } catch (err) {
+        } catch {
             return false;
         }
         delete this.map[path];

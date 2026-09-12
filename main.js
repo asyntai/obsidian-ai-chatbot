@@ -78,13 +78,13 @@ var AsyntaiApi = class {
     let res;
     try {
       res = await this.transport(req);
-    } catch (err) {
+    } catch {
       throw new ApiError("Asyntai did not answer. Check your connection.", 0);
     }
     let data = {};
     try {
       data = res.text ? JSON.parse(res.text) : {};
-    } catch (err) {
+    } catch {
       data = {};
     }
     if (res.status === 401) {
@@ -304,7 +304,7 @@ var SyncEngine = class {
     if (old && old !== kb) {
       try {
         await this.api.deleteEntry(old);
-      } catch (err) {
+      } catch {
       }
     }
     return { ok: true, skipped: false, message: "Note sent to Asyntai." };
@@ -317,7 +317,7 @@ var SyncEngine = class {
     }
     try {
       await this.api.deleteEntry(known.kb);
-    } catch (err) {
+    } catch {
       return false;
     }
     delete this.map[path];
@@ -926,7 +926,8 @@ var AsyntaiPlugin = class extends import_obsidian3.Plugin {
     this.map = raw.map || {};
   }
   async saveStored() {
-    await this.saveData({ settings: this.settings, map: this.map });
+    const data = { settings: this.settings, map: this.map };
+    await this.saveData(data);
   }
   async saveSettings() {
     await this.saveStored();

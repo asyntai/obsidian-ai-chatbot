@@ -125,14 +125,14 @@ export class AsyntaiApi {
         let res: TransportResponse;
         try {
             res = await this.transport(req);
-        } catch (err) {
+        } catch {
             throw new ApiError("Asyntai did not answer. Check your connection.", 0);
         }
 
         let data: Record<string, unknown> = {};
         try {
             data = res.text ? (JSON.parse(res.text) as Record<string, unknown>) : {};
-        } catch (err) {
+        } catch {
             data = {};
         }
 

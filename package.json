@@ -1,7 +1,7 @@
 {
   "name": "asyntai-ai-chatbot",
-  "version": "1.0.0",
-  "description": "Send your notes to the Asyntai AI chatbot knowledge base, ask it questions, and read website chats and leads inside Obsidian.",
+  "version": "1.0.1",
+  "description": "Send your notes to the Asyntai AI chatbot knowledge base, ask it questions, and read website chats and leads.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",

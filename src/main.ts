@@ -146,7 +146,8 @@ export default class AsyntaiPlugin extends Plugin {
     }
 
     private async saveStored(): Promise<void> {
-        await this.saveData({ settings: this.settings, map: this.map } as StoredData);
+        const data: StoredData = { settings: this.settings, map: this.map };
+        await this.saveData(data);
     }
 
     async saveSettings(): Promise<void> {
