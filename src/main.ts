@@ -12,6 +12,9 @@ interface StoredData {
 /** How long after the last keystroke a changed note is sent. */
 const SEND_DELAY_MS = 3000;
 
+/** Wait after start-up before the catch-up, so other sync tools can finish first. */
+const CATCH_UP_DELAY_MS = 15000;
+
 // requestUrl is Obsidian's own HTTP call. It runs outside the page, so the
 // browser's CORS rules do not apply to it.
 const transport: Transport = async (req) => {
@@ -127,7 +130,22 @@ export default class AsyntaiPlugin extends Plugin {
             this.registerEvent(this.app.vault.on("create", (file) => this.onChanged(file)));
             this.registerEvent(this.app.vault.on("delete", (file) => void this.onDeleted(file)));
             this.registerEvent(this.app.vault.on("rename", (file, oldPath) => void this.onRenamed(file, oldPath)));
+            this.registerInterval(window.setTimeout(() => void this.catchUp(), CATCH_UP_DELAY_MS));
         });
+    }
+
+    /** Send the notes that changed while the app was closed or on another device. */
+    private async catchUp(): Promise<void> {
+        if (!this.syncActive() || parseFolders(this.settings.folders).length === 0) {
+            return;
+        }
+        const r = await this.sync.catchUp();
+        this.refreshStatusBar();
+        if (r.failed > 0) {
+            new Notice(`Asyntai: ${r.failed} ${r.failed === 1 ? "note" : "notes"} could not be sent. ${r.errors[0] ?? ""}`);
+        } else if (r.sent > 0) {
+            new Notice(`Asyntai: updated ${r.sent} changed ${r.sent === 1 ? "note" : "notes"} in the knowledge base.`);
+        }
     }
 
     onunload(): void {

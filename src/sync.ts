@@ -206,14 +206,27 @@ export class SyncEngine {
         await this.push(note);
     }
 
+    /**
+     * Send only the notes that are new or changed since the last send. Used
+     * at start-up for edits made while the app was closed or on another
+     * device. It never removes an entry for a note it cannot see, because a
+     * vault that is still syncing can look incomplete at start-up.
+     */
+    async catchUp(): Promise<SyncAllResult> {
+        return this.syncAll(undefined, false);
+    }
+
     /** Send every wanted note and remove every note that is no longer wanted. */
-    async syncAll(onProgress?: (done: number, total: number) => void): Promise<SyncAllResult> {
+    async syncAll(
+        onProgress?: (done: number, total: number) => void,
+        removeMissing = true,
+    ): Promise<SyncAllResult> {
         const result: SyncAllResult = { sent: 0, skipped: 0, removed: 0, failed: 0, errors: [] };
         const notes = this.vault.notes().filter((n) => this.wanted(n.path));
         const present = new Set(notes.map((n) => n.path));
 
         // Entries whose note is gone, or moved out of the folders.
-        for (const path of Object.keys(this.map)) {
+        for (const path of removeMissing ? Object.keys(this.map) : []) {
             if (!present.has(path)) {
                 if (await this.remove(path)) {
                     result.removed += 1;

@@ -342,12 +342,21 @@ var SyncEngine = class {
     await this.save(this.map);
     await this.push(note);
   }
+  /**
+   * Send only the notes that are new or changed since the last send. Used
+   * at start-up for edits made while the app was closed or on another
+   * device. It never removes an entry for a note it cannot see, because a
+   * vault that is still syncing can look incomplete at start-up.
+   */
+  async catchUp() {
+    return this.syncAll(void 0, false);
+  }
   /** Send every wanted note and remove every note that is no longer wanted. */
-  async syncAll(onProgress) {
+  async syncAll(onProgress, removeMissing = true) {
     const result = { sent: 0, skipped: 0, removed: 0, failed: 0, errors: [] };
     const notes = this.vault.notes().filter((n) => this.wanted(n.path));
     const present = new Set(notes.map((n) => n.path));
-    for (const path of Object.keys(this.map)) {
+    for (const path of removeMissing ? Object.keys(this.map) : []) {
       if (!present.has(path)) {
         if (await this.remove(path)) {
           result.removed += 1;
@@ -808,6 +817,7 @@ function safeName(text) {
 
 // src/main.ts
 var SEND_DELAY_MS = 3e3;
+var CATCH_UP_DELAY_MS = 15e3;
 var transport = async (req) => {
   const res = await (0, import_obsidian3.requestUrl)({
     url: req.url,
@@ -911,7 +921,21 @@ var AsyntaiPlugin = class extends import_obsidian3.Plugin {
       this.registerEvent(this.app.vault.on("create", (file) => this.onChanged(file)));
       this.registerEvent(this.app.vault.on("delete", (file) => void this.onDeleted(file)));
       this.registerEvent(this.app.vault.on("rename", (file, oldPath) => void this.onRenamed(file, oldPath)));
+      this.registerInterval(window.setTimeout(() => void this.catchUp(), CATCH_UP_DELAY_MS));
     });
+  }
+  /** Send the notes that changed while the app was closed or on another device. */
+  async catchUp() {
+    if (!this.syncActive() || parseFolders(this.settings.folders).length === 0) {
+      return;
+    }
+    const r = await this.sync.catchUp();
+    this.refreshStatusBar();
+    if (r.failed > 0) {
+      new import_obsidian3.Notice(`Asyntai: ${r.failed} ${r.failed === 1 ? "note" : "notes"} could not be sent. ${r.errors[0] ?? ""}`);
+    } else if (r.sent > 0) {
+      new import_obsidian3.Notice(`Asyntai: updated ${r.sent} changed ${r.sent === 1 ? "note" : "notes"} in the knowledge base.`);
+    }
   }
   onunload() {
     for (const id of this.timers.values()) {

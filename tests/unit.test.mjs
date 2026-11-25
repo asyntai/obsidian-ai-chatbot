@@ -252,6 +252,26 @@ test("a note that became short is removed, a deleted note is removed", async () 
     assert.equal(server.store.size, 0);
 });
 
+test("catchUp sends new and changed notes but never removes missing ones", async () => {
+    const files = { "Support/A.md": LONG, "Support/B.md": LONG };
+    const { sync, server, vault } = engine(files);
+    await sync.syncAll();
+    assert.equal(server.store.size, 2);
+
+    // Closed app: A changed, C is new, B is not visible (vault still syncing).
+    vault.files["Support/A.md"] = LONG + " Changed while closed.";
+    vault.files["Support/C.md"] = LONG;
+    delete vault.files["Support/B.md"];
+    const r = await sync.catchUp();
+    assert.deepEqual(r, { sent: 2, skipped: 0, removed: 0, failed: 0, errors: [] });
+    assert.equal(sync.isSynced("Support/B.md"), true);
+    assert.equal(server.store.size, 3);
+    assert.equal(server.log.filter((l) => l.startsWith("DELETE")).length, 1); // only A's old copy
+
+    const again = await sync.catchUp();
+    assert.deepEqual(again, { sent: 0, skipped: 2, removed: 0, failed: 0, errors: [] });
+});
+
 test("rename moves the key, moving out of the folder removes the entry", async () => {
     const files = { "Support/A.md": LONG };
     const { sync, server, vault } = engine(files);

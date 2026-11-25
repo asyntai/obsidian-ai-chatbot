@@ -1,7 +1,7 @@
 {
   "id": "asyntai-ai-chatbot",
   "name": "Asyntai AI Chatbot",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "minAppVersion": "1.7.2",
   "description": "Send your notes to the Asyntai AI chatbot knowledge base, ask it questions, and read your website chats and leads.",
   "author": "Asyntai",

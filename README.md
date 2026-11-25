@@ -32,6 +32,8 @@ The plugin sends the text of the note, with the front matter removed and the Mar
 
 The plugin remembers which knowledge base entry belongs to which note in its own `data.json`, so an edit replaces the entry instead of adding a second one.
 
+When the app starts, the plugin also sends the notes that changed while it was closed or on another device. It only adds and updates at start-up; removing notes that are gone is left to **Send all**.
+
 ## Network use and account
 
 The plugin talks to the Asyntai API at asyntai.com: it sends the notes in the folders you choose, and it reads your chatbot's answers, website chats and leads. It needs an Asyntai account on the Starter plan or higher.
